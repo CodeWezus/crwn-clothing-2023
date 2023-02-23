@@ -1,38 +1,19 @@
-import Directory from './components/directory/directory';
+import Home from "./routes/home/home-route";
+import Navigation from "./routes/navigation/navigation-route";
+import Shop from "./routes/shop/shop-route";
+import { Routes, Route} from "react-router-dom";
 
 const App = () => {
-
-  // Data for the shop categories.
-  const categories = [
-    {
-      id: 1,
-      title: "hats",
-      imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
-    },
-    {
-      id: 2,
-      title: "jackets",
-      imageUrl: "https://i.ibb.co/px2tCc3/jackets.png",
-    },
-    {
-      id: 3,
-      title: "sneakers",
-      imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png",
-    },
-    {
-      id: 4,
-      title: "womens",
-      imageUrl: "https://i.ibb.co/GCCdy8t/womens.png",
-    },
-    {
-      id: 5,
-      title: "mens",
-      imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
-    },
-  ];
-
   return (
-    <Directory categories={categories} />
+    // Routes and Route allow us to assign a browser path/url to certain components. Route components can be nested within another,
+    // when the path is typed into a browser it will render the assigned element.
+    <Routes>
+      <Route path="/" element={<Navigation />}>
+        {/* Using index links the path to the parent. (Navigation) */}
+        <Route index element={<Home />} />
+        <Route path="shop" element={<Shop />} />
+      </Route>
+    </Routes>
   );
 };
 
