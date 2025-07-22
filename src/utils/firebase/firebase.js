@@ -21,38 +21,41 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Allows for the Google Sign-In popup functionality.
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, googleProvider);
 
 // Points to our database in Firestore.
 export const db = getFirestore();
 
-export const createUserDocumentFromAuth = async(userAuth) => {
-    const userDocRef = doc(db, 'users', userAuth.uid);
+export const createUserDocumentFromAuth = async (userAuth) => {
+  const userDocRef = doc(db, "users", userAuth.uid);
 
-    // Create a snapshot based on the properties in user document reference
-    const userSnapshot = await getDoc(userDocRef);
+  // Create a snapshot based on the properties in user document reference
+  const userSnapshot = await getDoc(userDocRef);
 
-    // If a snapshot doesn't exist, ie. a user does not have an account, we want to create that piece of data at the userRef location.
-    if(!userSnapshot.exists()){
-        const {displayName, email} = userAuth;
-        const createdAt = new Date();
+  // If a snapshot doesn't exist, ie. a user does not have an account, we want to create that piece of data at the userRef location.
+  if (!userSnapshot.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
 
-        try{
-            await setDoc(userDocRef, {
-                displayName,
-                email,
-                createdAt
-            })
-        } catch (error){
-            console.log("Error occured creating user...", error.message)
-        }
+    try {
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+      });
+    } catch (error) {
+      console.log("Error occured creating user...", error.message);
     }
+  }
 
-    return userDocRef;
-}
+  return userDocRef;
+};
